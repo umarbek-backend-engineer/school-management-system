@@ -1,0 +1,6 @@
+openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365
+go get golang.org/x/net/http2
+go get github.com/go-mail/mail/v2 
+go get github.com/golang-jwt/jwt/v5 
+go get github.com/go-sql-driver/mysql 
+go get github.com/joho/godotenv 
