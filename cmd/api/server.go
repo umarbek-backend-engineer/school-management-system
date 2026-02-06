@@ -19,7 +19,7 @@ import (
 // @title REST API Documentation
 // @version 1.0
 // @description This is a REST API for managing Teachers, Students and Executives
-// @host localhost:443
+// @host localhost:8080
 // @BasePath /
 // @schemes https
 // @securityDefinitions.apikey Bearer

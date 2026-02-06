@@ -15,12 +15,12 @@ This project now includes comprehensive Swagger/OpenAPI documentation for all RE
 Once the server is running, access the Swagger documentation at:
 
 ```
-https://localhost:443/swagger
+https://localhost:8080/swagger
 ```
 
 The Swagger JSON specification is available at:
 ```
-https://localhost:443/swagger.json
+https://localhost:8080/swagger.json
 ```
 
 ## API Endpoints Documentation
@@ -201,7 +201,7 @@ To use the complete Swagger documentation generation pipeline:
    ```
 
 4. **Access Swagger UI**:
-   Open your browser and navigate to `https://localhost:443/swagger`
+   Open your browser and navigate to `https://localhost:8080/swagger`
 
 ## Security
 
@@ -213,14 +213,14 @@ To use the complete Swagger documentation generation pipeline:
 
 ### Getting All Teachers
 ```bash
-curl -X GET "https://localhost:443/teachers/" \
+curl -X GET "https://localhost:8080/teachers/" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "accept: application/json"
 ```
 
 ### Creating a New Teacher
 ```bash
-curl -X POST "https://localhost:443/teachers/" \
+curl -X POST "https://localhost:8080/teachers/" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '[{"first_name":"John","last_name":"Doe","email":"john@example.com","class":"10A","subject":"Math"}]'
@@ -228,7 +228,7 @@ curl -X POST "https://localhost:443/teachers/" \
 
 ### Logging In
 ```bash
-curl -X POST "https://localhost:443/execs/login" \
+curl -X POST "https://localhost:8080/execs/login" \
   -H "Content-Type: application/json" \
   -d '{"username":"admin","password":"password"}'
 ```
