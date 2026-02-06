@@ -20,6 +20,17 @@ import (
 	"github.com/go-mail/mail/v2"
 )
 
+// GetExecHandler retrieves an executive by ID
+// @Summary Get executive by ID
+// @Description Get a specific executive by their ID
+// @Tags Executives
+// @Produce json
+// @Param id path int true "Executive ID"
+// @Success 200 {object} models.Exec
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/{id} [get]
+// @Security Bearer
 func GetExecHandler(w http.ResponseWriter, r *http.Request) {
 
 	idStr := r.PathValue("id")
@@ -75,6 +86,26 @@ func GetExecsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetExecsHandler retrieves all executives
+// @Summary Get all executives
+// @Description Get a list of all executives
+// @Tags Executives
+// @Produce json
+// @Success 200 {object} map[string]interface{} "List of executives"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/ [get]
+// @Security Bearer// AddExecsHandler adds new executives
+// @Summary Add new executives
+// @Description Create one or multiple new executives
+// @Tags Executives
+// @Accept json
+// @Produce json
+// @Param execs body []models.Exec true "Executive data"
+// @Success 201 {object} map[string]interface{} "Executives created successfully"
+// @Failure 400 {object} map[string]string "Invalid request body"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/ [post]
+// @Security Bearer
 func AddExecsHandler(w http.ResponseWriter, r *http.Request) {
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -125,6 +156,18 @@ func AddExecsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PatchExecsHandler patches multiple executives
+// @Summary Patch multiple executives
+// @Description Partially update multiple executives
+// @Tags Executives
+// @Accept json
+// @Produce json
+// @Param updates body []map[string]interface{} true "Executive updates"
+// @Success 200 {object} map[string]interface{} "Executives patched successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/ [patch]
+// @Security Bearer
 func PatchExecsHandler(w http.ResponseWriter, r *http.Request) {
 
 	var updates []map[string]interface{}
@@ -159,6 +202,19 @@ func PatchExecsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PatchExecHandler patches a specific executive
+// @Summary Patch executive
+// @Description Partially update a specific executive by ID
+// @Tags Executives
+// @Accept json
+// @Produce json
+// @Param id path int true "Executive ID"
+// @Param updates body map[string]interface{} true "Executive updates"
+// @Success 200 {object} map[string]interface{} "Executive patched successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/{id} [patch]
+// @Security Bearer
 func PatchExecHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -204,6 +260,16 @@ func PatchExecHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// ExecDeleteHandler deletes a specific executive
+// @Summary Delete executive
+// @Description Delete a specific executive by their ID
+// @Tags Executives
+// @Param id path int true "Executive ID"
+// @Success 204 "Executive deleted successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/{id} [delete]
+// @Security Bearer
 func ExecDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -237,6 +303,17 @@ func ExecDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// LogInHandler authenticates an executive and returns a JWT token
+// @Summary Executive login
+// @Description Authenticate an executive with username and password
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param credentials body models.Exec true "Login credentials (username and password)"
+// @Success 200 {object} map[string]string "JWT token"
+// @Failure 400 {object} map[string]string "Invalid credentials"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/login [post]
 func LogInHandler(w http.ResponseWriter, r *http.Request) {
 	// Data validation
 	var req models.Exec
@@ -326,21 +403,42 @@ func LogInHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// LogOuthandler logs out an executive by clearing the authentication cookie
+// @Summary Executive logout
+// @Description Log out the currently authenticated executive
+// @Tags Authentication
+// @Success 200 {object} map[string]string "Logout message"
+// @Router /execs/logout [post]
 func LogOuthandler(w http.ResponseWriter, r *http.Request) {
+	// Clear the Bearer token cookie
 	http.SetCookie(w, &http.Cookie{
 		Name:     "Bearer",
 		Value:    "",
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   true,
-		Expires:  time.Unix(0, 0),
+		MaxAge:   -1, // Negative MaxAge deletes the cookie
 		SameSite: http.SameSiteStrictMode,
 	})
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"message":"Loged out successfylly"}`))
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"message":"Logged out successfully"}`))
 }
 
+// UpdatePasswordhandler updates the password for an executive
+// @Summary Update password
+// @Description Update the password for a specific executive
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param id path int true "Executive ID"
+// @Param passwordData body models.Exec_Update_password_request true "Password update data"
+// @Success 200 {object} models.Exec_Update_password_response "Password updated successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/{id}/updatepassword [post]
+// @Security Bearer
 func UpdatePasswordhandler(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 
@@ -438,6 +536,17 @@ func UpdatePasswordhandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// ForgotPasswordHandler initiates password reset by sending a reset link to email
+// @Summary Forgot password
+// @Description Send a password reset link to the executive's email
+// @Tags Authentication
+// @Accept json
+// @Produce plain
+// @Param email body map[string]string true "Executive email"
+// @Success 200 {string} string "Password reset link sent to email"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/forgotpassword [post]
 func ForgotPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Email string `json:"email"`
@@ -529,6 +638,18 @@ func ForgotPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Password reset link send to %s", req.Email)
 }
 
+// ResetPasswordHandler resets the password using a reset token
+// @Summary Reset password
+// @Description Reset an executive's password using a reset token
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param resetcode path string true "Password reset token"
+// @Param passwordData body map[string]string true "New password information"
+// @Success 200 {object} map[string]string "Password reset successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /execs/resetpassword/reset/{resetcode} [post]
 func ResetPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	token := r.PathValue("resetcode")
 	type request struct {

@@ -1,0 +1,1164 @@
+basePath: /
+definitions:
+  models.Exec:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      inactivestatus:
+        type: boolean
+      last_name:
+        type: string
+      password:
+        type: string
+      password_changed_at:
+        type: string
+      password_reset_token:
+        type: string
+      password_reset_token_expires:
+        type: string
+      role:
+        type: string
+      user_created_at:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Exec_Update_password_request:
+    properties:
+      conform_password:
+        type: string
+      current_password:
+        type: string
+      new_password:
+        type: string
+    type: object
+  models.Exec_Update_password_response:
+    properties:
+      password_updated:
+        type: boolean
+      token:
+        type: string
+    type: object
+  models.Student:
+    properties:
+      class:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+    type: object
+  models.Teacher:
+    properties:
+      class:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      subject:
+        type: string
+    type: object
+host: localhost:443
+info:
+  contact: {}
+  description: This is a REST API for managing Teachers, Students and Executives
+  title: REST API Documentation
+  version: "1.0"
+paths:
+  /allstudents/:
+    delete:
+      description: Delete all students from the system
+      responses:
+        "200":
+          description: All students deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete all students
+      tags:
+      - Students
+  /allteachers/:
+    delete:
+      description: Delete all teachers from the system
+      responses:
+        "200":
+          description: All teachers deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete all teachers
+      tags:
+      - Teachers
+  /execs/:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Get a list of all executives
+        Create one or multiple new executives
+      parameters:
+      - description: Executive data
+        in: body
+        name: execs
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.Exec'
+          type: array
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: List of executives
+          schema:
+            additionalProperties: true
+            type: object
+        "201":
+          description: Executives created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer// AddExecsHandler adds new executives: []
+      - Bearer: []
+      summary: Add new executives
+      tags:
+      - Executives
+      - Executives
+    patch:
+      consumes:
+      - application/json
+      description: Partially update multiple executives
+      parameters:
+      - description: Executive updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Executives patched successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Patch multiple executives
+      tags:
+      - Executives
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Get a list of all executives
+        Create one or multiple new executives
+      parameters:
+      - description: Executive data
+        in: body
+        name: execs
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.Exec'
+          type: array
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: List of executives
+          schema:
+            additionalProperties: true
+            type: object
+        "201":
+          description: Executives created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer// AddExecsHandler adds new executives: []
+      - Bearer: []
+      summary: Add new executives
+      tags:
+      - Executives
+      - Executives
+  /execs/{id}:
+    delete:
+      description: Delete a specific executive by their ID
+      parameters:
+      - description: Executive ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Executive deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete executive
+      tags:
+      - Executives
+    get:
+      description: Get a specific executive by their ID
+      parameters:
+      - description: Executive ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Exec'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get executive by ID
+      tags:
+      - Executives
+    patch:
+      consumes:
+      - application/json
+      description: Partially update a specific executive by ID
+      parameters:
+      - description: Executive ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Executive updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Executive patched successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Patch executive
+      tags:
+      - Executives
+  /execs/{id}/updatepassword:
+    post:
+      consumes:
+      - application/json
+      description: Update the password for a specific executive
+      parameters:
+      - description: Executive ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Password update data
+        in: body
+        name: passwordData
+        required: true
+        schema:
+          $ref: '#/definitions/models.Exec_Update_password_request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password updated successfully
+          schema:
+            $ref: '#/definitions/models.Exec_Update_password_response'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Update password
+      tags:
+      - Authentication
+  /execs/forgotpassword:
+    post:
+      consumes:
+      - application/json
+      description: Send a password reset link to the executive's email
+      parameters:
+      - description: Executive email
+        in: body
+        name: email
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Password reset link sent to email
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Forgot password
+      tags:
+      - Authentication
+  /execs/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate an executive with username and password
+      parameters:
+      - description: Login credentials (username and password)
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.Exec'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid credentials
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Executive login
+      tags:
+      - Authentication
+  /execs/logout:
+    post:
+      description: Log out the currently authenticated executive
+      responses:
+        "200":
+          description: Logout message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Executive logout
+      tags:
+      - Authentication
+  /execs/resetpassword/reset/{resetcode}:
+    post:
+      consumes:
+      - application/json
+      description: Reset an executive's password using a reset token
+      parameters:
+      - description: Password reset token
+        in: path
+        name: resetcode
+        required: true
+        type: string
+      - description: New password information
+        in: body
+        name: passwordData
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Reset password
+      tags:
+      - Authentication
+  /students/:
+    patch:
+      consumes:
+      - application/json
+      description: Partially update multiple students
+      parameters:
+      - description: Student updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Students patched successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Patch multiple students
+      tags:
+      - Students
+    post:
+      consumes:
+      - application/json
+      description: Create one or multiple new students
+      parameters:
+      - description: Student data
+        in: body
+        name: students
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.Student'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Students created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Add new students
+      tags:
+      - Students
+  /students/{id}:
+    delete:
+      description: Delete a specific student by their ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Student deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete student
+      tags:
+      - Students
+    get:
+      description: Get a specific student by their ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get student by ID
+      tags:
+      - Students
+    patch:
+      consumes:
+      - application/json
+      description: Partially update a specific student by ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Student updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student patched successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Patch student
+      tags:
+      - Students
+    put:
+      consumes:
+      - application/json
+      description: Update a specific student by their ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Student data to update
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.Student'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Update student
+      tags:
+      - Students
+  /swagger:
+    get:
+      description: Serves the Swagger API documentation
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: Swagger UI HTML
+          schema:
+            type: string
+      summary: Serve Swagger UI
+      tags:
+      - documentation
+  /swagger.json:
+    get:
+      description: Serves the Swagger specification in JSON format
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Swagger JSON specification
+          schema:
+            type: object
+      summary: Serve Swagger specification
+      tags:
+      - documentation
+  /teachers/:
+    delete:
+      consumes:
+      - application/json
+      description: Delete multiple teachers by their IDs
+      parameters:
+      - description: Teacher IDs to delete
+        in: body
+        name: ids
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Teachers deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete multiple teachers
+      tags:
+      - Teachers
+    get:
+      description: Get a list of all teachers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of teachers
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get all teachers
+      tags:
+      - Teachers
+    patch:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Partially update multiple teachers
+        Partially update a specific teacher by ID
+      parameters:
+      - description: Teacher updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+      - description: Teacher updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: Teacher patched successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer// PatchTeacherHandler patches a specific teacher: []
+      - Bearer: []
+      summary: Patch teacher
+      tags:
+      - Teachers
+      - Teachers
+    post:
+      consumes:
+      - application/json
+      description: Create one or multiple new teachers
+      parameters:
+      - description: Teacher data
+        in: body
+        name: teachers
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.Teacher'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Teachers created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Add new teachers
+      tags:
+      - Teachers
+  /teachers/{id}:
+    delete:
+      description: Delete a specific teacher by their ID
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Teacher deleted successfully
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Delete teacher
+      tags:
+      - Teachers
+    get:
+      description: Get a specific teacher by their ID
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Teacher'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get teacher by ID
+      tags:
+      - Teachers
+    patch:
+      consumes:
+      - application/json
+      - application/json
+      description: |-
+        Partially update multiple teachers
+        Partially update a specific teacher by ID
+      parameters:
+      - description: Teacher updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Teacher updates
+        in: body
+        name: updates
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: Teacher patched successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer// PatchTeacherHandler patches a specific teacher: []
+      - Bearer: []
+      summary: Patch teacher
+      tags:
+      - Teachers
+      - Teachers
+    put:
+      consumes:
+      - application/json
+      description: Update a specific teacher by their ID
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Teacher data to update
+        in: body
+        name: teacher
+        required: true
+        schema:
+          $ref: '#/definitions/models.Teacher'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Teacher updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Update teacher
+      tags:
+      - Teachers
+  /teachers/{id}/studentcount/:
+    get:
+      description: Get the number of students taught by a specific teacher
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Student count
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get student count for teacher
+      tags:
+      - Teachers
+      - Students
+  /teachers/{id}/students/:
+    get:
+      description: Get a list of all students taught by a specific teacher
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of students
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - Bearer: []
+      summary: Get students by teacher
+      tags:
+      - Teachers
+      - Students
+schemes:
+- https
+securityDefinitions:
+  Bearer:
+    description: JWT Bearer token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -11,6 +11,17 @@ import (
 	"strconv"
 )
 
+// GetStudentHandler retrieves a student by ID
+// @Summary Get student by ID
+// @Description Get a specific student by their ID
+// @Tags Students
+// @Produce json
+// @Param id path int true "Student ID"
+// @Success 200 {object} models.Student
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /students/{id} [get]
+// @Security Bearer
 func GetStudentHandler(w http.ResponseWriter, r *http.Request) {
 
 	idStr := r.PathValue("id")
@@ -90,6 +101,18 @@ func getPaginationparams(r *http.Request) (int, int) {
 	return page, limit
 }
 
+// AddStudentHandler adds new students
+// @Summary Add new students
+// @Description Create one or multiple new students
+// @Tags Students
+// @Accept json
+// @Produce json
+// @Param students body []models.Student true "Student data"
+// @Success 201 {object} map[string]interface{} "Students created successfully"
+// @Failure 400 {object} map[string]string "Invalid request body"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /students/ [post]
+// @Security Bearer
 func AddStudentHandler(w http.ResponseWriter, r *http.Request) {
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -140,6 +163,19 @@ func AddStudentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// UpdateStudentHandler updates a student by ID
+// @Summary Update student
+// @Description Update a specific student by their ID
+// @Tags Students
+// @Accept json
+// @Produce json
+// @Param id path int true "Student ID"
+// @Param student body models.Student true "Student data to update"
+// @Success 200 {object} map[string]interface{} "Student updated successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /students/{id} [put]
+// @Security Bearer
 func UpdateStudentHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -184,6 +220,18 @@ func UpdateStudentHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// PatchStudentsHandler patches multiple students
+// @Summary Patch multiple students
+// @Description Partially update multiple students
+// @Tags Students
+// @Accept json
+// @Produce json
+// @Param updates body []map[string]interface{} true "Student updates"
+// @Success 200 {object} map[string]interface{} "Students patched successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /students/ [patch]
+// @Security Bearer
 func PatchStudentsHandler(w http.ResponseWriter, r *http.Request) {
 
 	var updates []map[string]interface{}
@@ -218,6 +266,19 @@ func PatchStudentsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PatchStudentHandler patches a specific student
+// @Summary Patch student
+// @Description Partially update a specific student by ID
+// @Tags Students
+// @Accept json
+// @Produce json
+// @Param id path int true "Student ID"
+// @Param updates body map[string]interface{} true "Student updates"
+// @Success 200 {object} map[string]interface{} "Student patched successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /students/{id} [patch]
+// @Security Bearer
 func PatchStudentHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -296,6 +357,16 @@ func StudentDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// StudentDeleteHandler deletes a specific student
+// @Summary Delete student
+// @Description Delete a specific student by their ID
+// @Tags Students
+// @Param id path int true "Student ID"
+// @Success 204 "Student deleted successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /students/{id} [delete]
+// @Security Bearer
 func DeleteStudentsHandler(w http.ResponseWriter, r *http.Request) {
 
 	var ids []int
@@ -331,6 +402,14 @@ func DeleteStudentsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteAllStudentsHandler deletes all students
+// @Summary Delete all students
+// @Description Delete all students from the system
+// @Tags Students
+// @Success 200 {object} map[string]interface{} "All students deleted successfully"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /allstudents/ [delete]
+// @Security Bearer
 func DeleteAllStudentsHandler(w http.ResponseWriter, r *http.Request) {
 
 	var DeletedStudents []models.Student

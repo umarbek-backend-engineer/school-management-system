@@ -10,6 +10,12 @@ func Router() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	//------------------------------------------------------------------------------------------------------
+	// Swagger Documentation Routes
+	//------------------------------------------------------------------------------------------------------
+	mux.HandleFunc("GET /swagger", http.HandlerFunc(handler.SwaggerHandler))
+	mux.HandleFunc("GET /swagger.json", http.HandlerFunc(handler.SwaggerJSONHandler))
+
+	//------------------------------------------------------------------------------------------------------
 
 	mux.HandleFunc("GET /teachers/", http.HandlerFunc(handler.GetTeachersHandler))
 	mux.HandleFunc("POST /teachers/", http.HandlerFunc(handler.AddTeacherHandler))

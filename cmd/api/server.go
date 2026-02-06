@@ -1,6 +1,7 @@
 package main
 
 import (
+	"RESTAPI/internal/api/handler"
 	mid "RESTAPI/internal/api/middlerwares"
 	"RESTAPI/internal/api/router"
 	"RESTAPI/internal/repository/sqlconnections"
@@ -15,6 +16,16 @@ import (
 	"golang.org/x/net/http2"
 )
 
+// @title REST API Documentation
+// @version 1.0
+// @description This is a REST API for managing Teachers, Students and Executives
+// @host localhost:443
+// @BasePath /
+// @schemes https
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description JWT Bearer token
 func main() {
 
 	err := godotenv.Load("cmd/api/.env")
@@ -37,6 +48,9 @@ func main() {
 	log.Println("✅ Maria Database connected successfully")
 	time.Sleep(time.Millisecond * 200)
 
+	// Initialize Swagger documentation
+	handler.InitSwagger()
+
 	mux := router.Router()
 
 	tlsConfige := &tls.Config{
@@ -51,7 +65,7 @@ func main() {
 	}
 
 	rl := mid.NewLimiter(60, time.Second*30)
-	securityMUX := utils.ApplayMiddlewares(mux, mid.Hpp(hppOptions), mid.Compress, mid.Security_middleware, mid.Responce_time, rl.RL, mid.Cors, mid.JWT_Middlerware, mid.Sanitize)
+	securityMUX := utils.ApplayMiddlewares(mux, mid.Hpp(hppOptions), mid.Compress, mid.Exclude_Routes(mid.Security_middleware, "/swagger", "/swagger.json", "/execs/login", "/execs/logout", "/execs/forgotpassword", "/execs/resetpassword/reset/{resetcode}"), mid.Responce_time, rl.RL, mid.Exclude_Routes(mid.JWT_Middlerware, "/swagger", "/swagger.json", "/execs/login", "/execs/logout", "/execs/forgotpassword", "/execs/resetpassword/reset/{resetcode}"), mid.Sanitize)
 	log.Println("✅ Security layers implemented  successfully")
 	time.Sleep(time.Millisecond * 200)
 
@@ -65,6 +79,6 @@ func main() {
 	log.Println("✅ Server  implemented httpS successfully")
 	time.Sleep(time.Millisecond * 200)
 
-	log.Println("Server is running on port:", port)
+	log.Println("Server is running on port", port)
 	server.ListenAndServeTLS(cert, key)
 }

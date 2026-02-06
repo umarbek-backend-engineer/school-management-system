@@ -15,6 +15,17 @@ import (
 
 var mutex = &sync.Mutex{}
 
+// GetTeacherHandler retrieves a teacher by ID
+// @Summary Get teacher by ID
+// @Description Get a specific teacher by their ID
+// @Tags Teachers
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Success 200 {object} models.Teacher
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/{id} [get]
+// @Security Bearer
 func GetTeacherHandler(w http.ResponseWriter, r *http.Request) {
 
 	idStr := r.PathValue("id")
@@ -42,6 +53,15 @@ func GetTeacherHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// GetTeachersHandler retrieves all teachers
+// @Summary Get all teachers
+// @Description Get a list of all teachers
+// @Tags Teachers
+// @Produce json
+// @Success 200 {object} map[string]interface{} "List of teachers"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/ [get]
+// @Security Bearer
 func GetTeachersHandler(w http.ResponseWriter, r *http.Request) {
 
 	teacherlist, err := sqlconnections.GetTeachersDBHandler(w, r)
@@ -70,6 +90,18 @@ func GetTeachersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// AddTeacherHandler adds new teachers
+// @Summary Add new teachers
+// @Description Create one or multiple new teachers
+// @Tags Teachers
+// @Accept json
+// @Produce json
+// @Param teachers body []models.Teacher true "Teacher data"
+// @Success 201 {object} map[string]interface{} "Teachers created successfully"
+// @Failure 400 {object} map[string]string "Invalid request body"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/ [post]
+// @Security Bearer
 func AddTeacherHandler(w http.ResponseWriter, r *http.Request) {
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -121,6 +153,19 @@ func AddTeacherHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// UpdateTeacherHandler updates a teacher by ID
+// @Summary Update teacher
+// @Description Update a specific teacher by their ID
+// @Tags Teachers
+// @Accept json
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Param teacher body models.Teacher true "Teacher data to update"
+// @Success 200 {object} map[string]interface{} "Teacher updated successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/{id} [put]
+// @Security Bearer
 func UpdateTeacherHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -199,6 +244,30 @@ func PatchTeachersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PatchTeachersHandler patches multiple teachers
+// @Summary Patch multiple teachers
+// @Description Partially update multiple teachers
+// @Tags Teachers
+// @Accept json
+// @Produce json
+// @Param updates body []map[string]interface{} true "Teacher updates"
+// @Success 200 {object} map[string]interface{} "Teachers patched successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/ [patch]
+// @Security Bearer// PatchTeacherHandler patches a specific teacher
+// @Summary Patch teacher
+// @Description Partially update a specific teacher by ID
+// @Tags Teachers
+// @Accept json
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Param updates body map[string]interface{} true "Teacher updates"
+// @Success 200 {object} map[string]interface{} "Teacher patched successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/{id} [patch]
+// @Security Bearer
 func PatchTeacherHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -244,6 +313,16 @@ func PatchTeacherHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TeacherDeleteHandler deletes a specific teacher
+// @Summary Delete teacher
+// @Description Delete a specific teacher by their ID
+// @Tags Teachers
+// @Param id path int true "Teacher ID"
+// @Success 204 "Teacher deleted successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/{id} [delete]
+// @Security Bearer
 func TeacherDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
 	idstr := r.PathValue("id")
@@ -277,6 +356,18 @@ func TeacherDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteTeachersHandler deletes multiple teachers
+// @Summary Delete multiple teachers
+// @Description Delete multiple teachers by their IDs
+// @Tags Teachers
+// @Accept json
+// @Produce json
+// @Param ids body []int true "Teacher IDs to delete"
+// @Success 200 {object} map[string]interface{} "Teachers deleted successfully"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/ [delete]
+// @Security Bearer
 func DeleteTeachersHandler(w http.ResponseWriter, r *http.Request) {
 
 	var ids []int
@@ -312,6 +403,17 @@ func DeleteTeachersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetStudentsByTeacherID retrieves all students for a specific teacher
+// @Summary Get students by teacher
+// @Description Get a list of all students taught by a specific teacher
+// @Tags Teachers,Students
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Success 200 {object} map[string]interface{} "List of students"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/{id}/students/ [get]
+// @Security Bearer
 func GetStudentsByTeacherID(w http.ResponseWriter, r *http.Request) {
 
 	_, err := utils.AuthorizeUsers(r.Context().Value("user_role").(string), "exec")
@@ -348,6 +450,14 @@ func GetStudentsByTeacherID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DeleteAllTeachersHandler deletes all teachers
+// @Summary Delete all teachers
+// @Description Delete all teachers from the system
+// @Tags Teachers
+// @Success 200 {object} map[string]interface{} "All teachers deleted successfully"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /allteachers/ [delete]
+// @Security Bearer
 func DeleteAllTeachersHandler(w http.ResponseWriter, r *http.Request) {
 
 	var DeletedTeachers []models.Teacher
@@ -376,6 +486,17 @@ func DeleteAllTeachersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetstudnetCountForATeacher retrieves the count of students for a teacher
+// @Summary Get student count for teacher
+// @Description Get the number of students taught by a specific teacher
+// @Tags Teachers,Students
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Success 200 {object} map[string]interface{} "Student count"
+// @Failure 400 {object} map[string]string "Bad request"
+// @Failure 500 {object} map[string]string "Internal server error"
+// @Router /teachers/{id}/studentcount/ [get]
+// @Security Bearer
 func GetstudnetCountForATeacher(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 
